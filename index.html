@@ -257,36 +257,6 @@
             </div>
           </div>
         </div>
-      </div><div class="menu-item">
-        <img src="https://tiffyai-usd.github.io/Papa_Rons_Cafe/buffelowings.jpg" alt="WINGLETS">
-        <div class="card">
-          <h3>WINGLETS</h3>
-          <p class="desc">5 for R60 • 10 for R100 — served with dip</p>
-          <div class="price">5 for R60 · 10 for R100</div>
-          <div class="row">
-            <a class="drinks-link" href="https://tiffyai-usd.github.io/Papa_Rons_Cafe/drinks-menu.html" target="_blank" rel="noopener">ADD DRINKS</a>
-            <div class="qty-controls">
-              <div class="qty-btn" data-key="snacksGrid-3" data-change="-1">−</div>
-              <div class="qty-num" id="qty-snacksGrid-3">0</div>
-              <div class="qty-btn" data-key="snacksGrid-3" data-change="1">+</div>
-            </div>
-          </div>
-        </div>
-      </div><div class="menu-item">
-        <img src="https://tiffyai-usd.github.io/Papa_Rons_Cafe/platter.jpg" alt="PLATTER">
-        <div class="card">
-          <h3>PLATTER</h3>
-          <p class="desc">Mixed meat platter for 2</p>
-          <div class="price">R350.00</div>
-          <div class="row">
-            <a class="drinks-link" href="https://tiffyai-usd.github.io/Papa_Rons_Cafe/drinks-menu.html" target="_blank" rel="noopener">ADD DRINKS</a>
-            <div class="qty-controls">
-              <div class="qty-btn" data-key="snacksGrid-4" data-change="-1">−</div>
-              <div class="qty-num" id="qty-snacksGrid-4">0</div>
-              <div class="qty-btn" data-key="snacksGrid-4" data-change="1">+</div>
-            </div>
-          </div>
-        </div>
       </div></div>
 
     
@@ -518,7 +488,7 @@
     }
   </style>
 
-  <!-- FULL ORIGINAL SCRIPT (only fixed the crash lines) -->
+  <!-- FULL ORIGINAL SCRIPT (only removed the last 6 empty items from snacks) -->
   <script>
     // ---------- Data (sorted) ----------
     const pizzas = [
@@ -643,8 +613,8 @@ const snacks = [
     renderGroup(burgers, 'burgersGrid');
     renderGroup(grill, 'grillGrid');
     renderGroup(snacks, 'snacksGrid');
-    // renderGroup(breakfast, 'breakfastGrid');   // removed - causes crash
-    // renderGroup(sides, 'sidesGrid');           // removed - causes crash
+    renderGroup(breakfast, 'breakfastGrid');
+    renderGroup(sides, 'sidesGrid');
 
     const qtyState = {};
 
@@ -680,7 +650,7 @@ const snacks = [
       if (total === 0) return;
 
       let message = "Hi! I'd like to order the following:\n\n";
-      const groups = [{items:pizzas,id:'pizzasGrid'},{items:burgers,id:'burgersGrid'},{items:grill,id:'grillGrid'},{items:snacks,id:'snacksGrid'}];
+      const groups = [{items:pizzas,id:'pizzasGrid'},{items:burgers,id:'burgersGrid'},{items:grill,id:'grillGrid'},{items:snacks,id:'snacksGrid'},{items:breakfast,id:'breakfastGrid'},{items:sides,id:'sidesGrid'}];
       groups.forEach(g => {
         g.items.forEach((it,i) => {
           const q = qtyState[g.id + '-' + i] || 0;
