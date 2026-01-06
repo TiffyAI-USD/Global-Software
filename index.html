@@ -699,68 +699,264 @@ function createMenuCard(item, key) {
       message += "\nThank you!";
       btn.href = "https://wa.me/+27847868560?text=" + encodeURIComponent(message);
       btn.textContent = 'ORDER NOW (' + total + ')';
+<script>
+  // ---------- Data ----------
+  const pizzas = [
+    {
+      name: "AVG Antivirus",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/AVG.jpg",
+      desc: "Ultimate protection, privacy, and performance"
+    },
+    {
+      name: "Avast Antivirus",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/avast.jpg",
+      desc: "Avast Antivirus is a family of cross-platform internet security applications developed by Gen Digital Inc. for Microsoft Windows, macOS, Android, and iOS. Avast offers free and paid products for computer security, browser security, antivirus software, firewall, anti-phishing, antispyware, and anti-spam, among other services."
+    },
+    {
+      name: "Antivirus Packages",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/antivirus.jpg",
+      desc: "Antivirus software (abbreviated to AV software), also known as anti-malware, is software intended to prevent, detect, and remove malware. Antivirus software..."
     }
+  ];
 
+  const burgers = [
+    {
+      name: "McAfee",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/mcafee.jpg",
+      desc: "Virus Scan Software"
+    },
+    {
+      name: "Microsoft",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/microsoft.jpg",
+      desc: "Microsoft Windows is a proprietary graphical operating system developed and marketed by Microsoft. Windows is grouped into families that cater to particular.."
+    },
+    {
+      name: "Enterprise",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/enterprise.jpg",
+      desc: "Enterprise software, also known as enterprise application software (EAS)"
+    }
+  ];
+
+  const grill = [
+    {
+      name: "Office",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/office.jpg",
+      desc: "Productivity software (also called personal productivity software or office productivity software) is application software used for producing information..."
+    },
+    {
+      name: "Office Standard",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/officestandard.jpg",
+      desc: "Microsoft Office, MS Office, or simply Office, is an office suite and (formerly) a family of client software, server software, and services developed..."
+    },
+    {
+      name: "Office Pro Plus",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/officeproplus.jpg",
+      desc: "Office Pro Plus provides additional features to the Pro tier including: Call Queuing, Hot Desking, Salesforce..."
+    },
+    {
+      name: "Windows 11 Home",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/win11home.jpg",
+      desc: "Windows 11 is the current major release of Microsoft's Windows NT operating system"
+    }
+  ];
+
+  const snacks = [
+    {
+      name: "Windows 11 Pro",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/win11pro.jpg",
+      desc: "Windows 11 Pro is the current major release of Microsoft's Windows NT operating system"
+    },
+    {
+      name: "Trend Micro",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/trendmicro.jpg",
+      desc: "Cyber Security Software"
+    },
+    {
+      name: "Quick Books",
+      price: 200,
+      img: "https://tiffyai-usd.github.io/Global-Software/quickbooks.jpg",
+      desc: "Point of Sale Software: QuickBooks is an accounting software package developed and marketed by Intuit."
+    }
+  ];
+
+  function createMenuCard(item, key) {
+    const div = document.createElement('div');
+    div.className = 'menu-item';
+    const priceHtml = item.price === null ? `<div class="price"></div>` : `<div class="price">R${item.price}.00</div>`;
+    div.innerHTML = `
+      <img src="\( {item.img}" alt=" \){item.name}">
+      <div class="card">
+        <h3>${item.name}</h3>
+        <p class="desc">${item.desc}</p>
+        ${priceHtml}
+        <div class="row">
+          <a class="drinks-link" href="https://wa.me/+27847868560" target="_blank" rel="noopener">+ or - to Add to Cart</a>
+          <div class="qty-controls">
+            <div class="qty-btn" data-key="${key}" data-change="-1">−</div>
+            <div class="qty-num" id="qty-${key}">0</div>
+            <div class="qty-btn" data-key="${key}" data-change="1">+</div>
+          </div>
+        </div>
+      </div>
+    `;
+    return div;
+  }
+
+  function renderGroup(items, containerId) {
+    const grid = document.getElementById(containerId);
+    if (!grid) {
+      console.error(`Grid not found: ${containerId}`);
+      return;
+    }
+    grid.innerHTML = '';
+    items.forEach((it, i) => {
+      const key = `\( {containerId}- \){i}`;
+      const card = createMenuCard(it, key);
+      grid.appendChild(card);
+    });
+    console.log(`Rendered ${items.length} items into ${containerId}`);
+  }
+
+  try {
+    renderGroup(pizzas, 'pizzasGrid');
+    renderGroup(burgers, 'burgersGrid');
+    renderGroup(grill, 'grillGrid');
+    renderGroup(snacks, 'snacksGrid');
+    console.log("All groups rendered successfully");
+  } catch (err) {
+    console.error("Rendering failed:", err);
+  }
+
+  const qtyState = {};
+
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('.qty-btn');
+    if (!el) return;
+    const key = el.dataset.key;
+    const change = parseInt(el.dataset.change, 10);
+    const qtyEl = document.getElementById('qty-' + key);
+    if (!qtyEl) {
+      console.warn(`Qty element not found for key: ${key}`);
+      return;
+    }
+    let val = parseInt(qtyEl.textContent, 10) || 0;
+    val += change;
+    if (val < 0) val = 0;
+    qtyEl.textContent = val;
+    qtyState[key] = val;
     updateOrderButton();
+  });
 
-    const mainBtn = document.getElementById('mainBtn');
-    const actionMenu = document.getElementById('actionMenu');
-    const scrollToMenu = document.getElementById('scrollToMenu');
+  function updateOrderButton() {
+    let total = Object.values(qtyState).reduce((a, b) => a + b, 0);
+    let btn = document.getElementById('bottomOrderBtn');
+    if (!btn) {
+      btn = document.createElement('a');
+      btn.id = 'bottomOrderBtn';
+      btn.className = 'gold-flame-btn';
+      btn.style.position = 'fixed';
+      btn.style.right = '16px';
+      btn.style.bottom = '22px';
+      btn.style.zIndex = '999';
+      btn.style.padding = '12px 18px';
+      document.body.appendChild(btn);
+    }
+    btn.style.display = total > 0 ? 'inline-flex' : 'none';
+    if (total === 0) return;
 
-    mainBtn.addEventListener('click', (e) => {
-      actionMenu.classList.toggle('show');
-      mainBtn.classList.toggle('open');
-      e.stopPropagation();
+    let message = "Hi! I'd like to order the following:\n\n";
+    const groups = [
+      {items: pizzas, id: 'pizzasGrid'},
+      {items: burgers, id: 'burgersGrid'},
+      {items: grill, id: 'grillGrid'},
+      {items: snacks, id: 'snacksGrid'}
+    ];
+    groups.forEach(g => {
+      g.items.forEach((it, i) => {
+        const q = qtyState[g.id + '-' + i] || 0;
+        if (q > 0) {
+          message += q + " x " + it.name + " - R" + it.price + ".00\n";
+        }
+      });
     });
+    message += "\nThank you!";
+    btn.href = "https://wa.me/+27847868560?text=" + encodeURIComponent(message);
+    btn.textContent = 'ORDER NOW (' + total + ')';
+  }
 
-    document.addEventListener('click', (e) => {
-      if (!mainBtn.contains(e.target) && !actionMenu.contains(e.target)) {
-        actionMenu.classList.remove('show');
-        mainBtn.classList.remove('open');
-      }
-    });
+  updateOrderButton();
 
-    scrollToMenu.addEventListener('click', (e) => {
-      e.preventDefault();
-      document.getElementById('menu').scrollIntoView({behavior:'smooth'});
+  // Rest of your original event listeners (mainBtn, actionMenu, lightbox, etc.) remain unchanged
+  const mainBtn = document.getElementById('mainBtn');
+  const actionMenu = document.getElementById('actionMenu');
+  const scrollToMenu = document.getElementById('scrollToMenu');
+
+  mainBtn.addEventListener('click', (e) => {
+    actionMenu.classList.toggle('show');
+    mainBtn.classList.toggle('open');
+    e.stopPropagation();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!mainBtn.contains(e.target) && !actionMenu.contains(e.target)) {
       actionMenu.classList.remove('show');
       mainBtn.classList.remove('open');
-    });
+    }
+  });
 
-    const openMenu = document.getElementById('openMenu');
-    const menuLightbox = document.getElementById('menuLightbox');
-    const closeMenu = document.getElementById('closeMenu');
+  scrollToMenu.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('menu').scrollIntoView({behavior:'smooth'});
+    actionMenu.classList.remove('show');
+    mainBtn.classList.remove('open');
+  });
 
-    openMenu.addEventListener('click', (e) => {
-      e.preventDefault();
-      menuLightbox.style.display = 'flex';
-      actionMenu.classList.remove('show');
-      mainBtn.classList.remove('open');
-    });
+  const openMenu = document.getElementById('openMenu');
+  const menuLightbox = document.getElementById('menuLightbox');
+  const closeMenu = document.getElementById('closeMenu');
 
-    closeMenu.addEventListener('click', () => {
+  openMenu.addEventListener('click', (e) => {
+    e.preventDefault();
+    menuLightbox.style.display = 'flex';
+    actionMenu.classList.remove('show');
+    mainBtn.classList.remove('open');
+  });
+
+  closeMenu.addEventListener('click', () => {
+    menuLightbox.style.display = 'none';
+  });
+
+  menuLightbox.addEventListener('click', (e) => {
+    if (e.target === menuLightbox) menuLightbox.style.display = 'none';
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
       menuLightbox.style.display = 'none';
-    });
+      actionMenu.classList.remove('show');
+      mainBtn.classList.remove('open');
+    }
+  });
 
-    menuLightbox.addEventListener('click', (e) => {
-      if (e.target === menuLightbox) menuLightbox.style.display = 'none';
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        menuLightbox.style.display = 'none';
-        actionMenu.classList.remove('show');
-        mainBtn.classList.remove('open');
-      }
-    });
-
-    document.addEventListener('error', function(e){
-      const el = e.target;
-      if (el.tagName && el.tagName.toLowerCase() === 'img') {
-        el.src = 'https://via.placeholder.com/600x400/333/ccc?text=Image+Missing';
-      }
-    }, true);
-  </script>
+  document.addEventListener('error', function(e){
+    const el = e.target;
+    if (el.tagName && el.tagName.toLowerCase() === 'img') {
+      el.src = 'https://via.placeholder.com/600x400/333/ccc?text=Image+Missing';
+    }
+  }, true);
+</script>
   <a id="bottomOrderBtn" class="gold-flame-btn" style="position: fixed; right: 16px; bottom: 22px; z-index: 999; padding: 12px 18px; display: none;"></a>
 
   <!-- EDITOR -->
